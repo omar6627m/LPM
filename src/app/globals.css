@@ -2,26 +2,103 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    /* Name: custom color palette
+       Author: Ilias Ism
+       URL: https://gradient.page */
+
+    --gradient: #00467F;
+    --background: 220 100% 98.5%;
+    --foreground: 220 10% 1%;
+
+    --muted: 220 10% 92.5%;
+    --muted-foreground: 220 5% 42.5%;
+
+    --popover: 220 10% 92.5%;
+    --popover-foreground: 220 10% 1.25%;
+
+    --card: 220 10% 92.5%;
+    --card-foreground: 220 10% 1.25%;
+
+    --border: 220 15% 90%;
+    --input: 220 15% 90%;
+
+    --primary: 220 100% 25%;
+    --primary-foreground: 220 2% 92.5%;
+
+    --secondary: 220 5% 96.25%;
+    --secondary-foreground: 220 7% 12.5%;
+
+    --accent: 220 5% 96.25%;
+    --accent-foreground: 220 7% 12.5%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 220 100% 25%;
+
+    --radius: 0.5rem;
+
+  }
+
+  .dark {
+    /* Name: custom color palette
+      Author: Ilias Ism
+      URL: https://gradient.page */
+
+    /* CSS: .bg-gradient { background: var(--gradient) } */
+    --gradient: url(/public/beautiful-blue-001.jpg);
+
+    --background: 210 26% 7.84%;
+    --foreground: 210 4% 99.9%;
+
+    --muted: 210 20% 29.4%;
+    --muted-foreground: 210 4% 59.8%;
+
+    --popover: 210 57% 12.74%;
+    --popover-foreground: 210 4% 99.9%;
+
+    --card: 210 57% 12.74%;
+    --card-foreground: 210 4% 99.9%;
+
+    --border: 210 20% 29.4%;
+    --input: 210 20% 29.4%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 210 4% 9.8%;
+
+    --secondary: 210 20% 29.4%;
+    --secondary-foreground: 210 4% 99.9%;
+
+    --accent: 210 20% 29.4%;
+    --accent-foreground: 210 4% 99.9%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 4% 99.9%;
+
+    --ring: 210 40% 98%;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+main, nav {
+  @apply max-w-6xl mx-auto my-6;
+}
+p {
+  @apply mt-2;
+}
+h1 {
+  @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+}
+h2 {
+  @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
 }
