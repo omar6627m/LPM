@@ -1,33 +1,77 @@
 "use client"
 
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
+import {useUserStore} from "../../../store/zustand";
+import * as z from "zod"
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useForm} from "react-hook-form";
+import {Button} from "@/components/ui/button";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
+
+const formSchema = z.object({
+    password: z.string().min(4).max(50),
+})
 
 const LoginPage = () => {
     const router = useRouter();
     const [password, setPassword] = useState('');
-    const correctPassword = 'your_hardcoded_password';
+    const correctPassword = 'password';
+    const {login,user} = useUserStore();
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            password: "",
+        },
+    });
 
-    const handleLogin = () => {
-        if (password === correctPassword) {
-            // Save login state (e.g., using cookies, local storage, or a state management library)
-            // Redirect the user to the desired page
-            // TODO: Use Zustand to save user state
-            router.push('/');
+    useEffect(() => {
+        if (user) {
+            router.push("/");
         }
-    };
+    }, [router, user]);
+
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        console.log(values)
+        // TODO: some ux for feedback
+        if (values.password === correctPassword) {
+            login("token");
+            router.push('/');
+        }else {
+            form.setError('password', {
+                type: 'manual',
+                message: 'Incorrect password. Please try again.',
+            });
+            setPassword("");
+        }
+    }
 
     return (
-        <div>
-            <h1>Login Page</h1>
-            <input
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={handleLogin}>Login</button>
-        </div>
+        <main className="mt-72 w-1/6">
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                <Input placeholder="password" type="password" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    Enter your master password.
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="submit">Submit</Button>
+                </form>
+            </Form>
+        </main>
+
     );
 };
 

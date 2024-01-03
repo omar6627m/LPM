@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import Image from "next/image";
 import {Button} from "@/components/ui/button";
@@ -5,8 +7,11 @@ import {ModeToggle} from "@/components/theme-toggle";
 import {LuLogOut} from "react-icons/lu";
 import {RiSettings5Line} from "react-icons/ri";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {useUserStore} from "../../store/zustand";
 
 const Header = () => {
+    const {logout} = useUserStore();
+
     return (
         <header className="py-4 flex justify-between items-center">
             <div className="flex space-x-2 items-center">
@@ -25,7 +30,7 @@ const Header = () => {
                 <Button variant="outline" size="icon">
                     <RiSettings5Line className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" onClick={logout}>
                     <LuLogOut className="h-4 w-4" />
                 </Button>
                 <Avatar>
