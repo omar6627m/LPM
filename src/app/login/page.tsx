@@ -9,14 +9,17 @@ import {useForm} from "react-hook-form";
 import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
+import {useToast} from "@/components/ui/use-toast";
+import {formatDate} from "../../../utils/helpers";
+import {Toaster} from "@/components/ui/toaster";
 
 const formSchema = z.object({
     password: z.string().min(4).max(50),
-})
+});
 
 const LoginPage = () => {
     const router = useRouter();
-    const [password, setPassword] = useState('');
+    const {toast} = useToast();
     const correctPassword = 'password';
     const {login,user} = useUserStore();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -37,18 +40,22 @@ const LoginPage = () => {
         // TODO: some ux for feedback
         if (values.password === correctPassword) {
             login("token");
+            toast({
+                title: "Login: Successful",
+                description: formatDate(String(new Date())),
+            });
             router.push('/');
         }else {
             form.setError('password', {
                 type: 'manual',
                 message: 'Incorrect password. Please try again.',
             });
-            setPassword("");
         }
     }
 
     return (
         <main className="mt-72 w-1/6">
+            <Toaster />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
