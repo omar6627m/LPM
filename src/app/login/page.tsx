@@ -37,7 +37,6 @@ const LoginPage = () => {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values)
-        // TODO: some ux for feedback
         if (values.password === correctPassword) {
             login("token");
             toast({
