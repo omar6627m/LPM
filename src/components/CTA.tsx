@@ -22,6 +22,7 @@ import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, Form
 import {Input} from "@/components/ui/input";
 import {useUserStore} from "../../store/zustand";
 import {Label} from "@/components/ui/label";
+import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
 
 const formSchema = z.object({
     password: z.string().min(4).max(50),
@@ -192,18 +193,15 @@ const CTA = () => {
                     <CiExport className="mr-2 h-4 w-4" /> Export
                 </Button>
             </div>
+
+
             <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
-                <DialogTrigger asChild>
-                    <Button variant="default" size="icon">
-                        <IoMdAdd className="h-4 w-4" />
-                    </Button>
-                </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Import passwords from a file</DialogTitle>
                         <DialogDescription>
                             <div className="grid w-full my-5 max-w-sm items-center gap-1.5">
-                                <Label htmlFor="picture">Picture</Label>
+                                <Label htmlFor="fileInput">File</Label>
                                 <Input type="file"
                                        id="fileInput"
                                        accept=".json"
