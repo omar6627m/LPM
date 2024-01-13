@@ -27,6 +27,7 @@ import {toast} from "@/components/ui/use-toast";
 import {formatDate} from "../../../utils/helpers";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
+import {useUserStore} from "../../../store/zustand";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -99,6 +100,8 @@ export const columns: ColumnDef<Password>[] = [
         cell: ({ row }) => {
             const password = row.original;
             // eslint-disable-next-line react-hooks/rules-of-hooks
+            const {user,toggleRefresh} = useUserStore();
+            // eslint-disable-next-line react-hooks/rules-of-hooks
             const [dialog, setDialog] = useState("edit");
             // eslint-disable-next-line react-hooks/rules-of-hooks
             const [dialogOpen, setDialogOpen] = useState(false);
@@ -111,28 +114,68 @@ export const columns: ColumnDef<Password>[] = [
                     username: password.username,
                 },
             });
-            function onSubmitEdit(values: z.infer<typeof formSchema>) {
-                console.log(values)
-                if (true) {
+            async function onSubmitEdit(values: z.infer<typeof formSchema>) {
+                try {
+                    const response = await fetch(`http://localhost:8080/password/${password.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${user}`
+                        },
+                        body: JSON.stringify(values),
+                    });
+                    if (response.ok) {
+                        toast({
+                            title: "Password: Updated",
+                            description: formatDate(String(new Date())),
+                        });
+                        setDialogOpen(false);
+                        toggleRefresh();
+                    }else{
+                        toast({
+                            title: "Error: Try again",
+                            description: formatDate(String(new Date())),
+                        });
+                    }
+
+                }catch (e) {
+                    console.log(e);
                     toast({
-                        title: "Password: Updated",
+                        title: "Error: Something went wrong",
                         description: formatDate(String(new Date())),
                     });
-                    setDialogOpen(false);
-                }else {
-                    // when an error from the server is returned
                 }
             }
 
-            function onSubmitDelete() {
-                if (true) {
+            async function onSubmitDelete() {
+                try {
+                    const response = await fetch(`http://localhost:8080/password/${password.id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${user}`
+                        },
+                    });
+                    if (response.ok) {
+                        toast({
+                            title: "Password: Deleted",
+                            description: formatDate(String(new Date())),
+                        });
+                        setDialogOpen(false);
+                        toggleRefresh();
+                    }else{
+                        toast({
+                            title: "Error: Try again",
+                            description: formatDate(String(new Date())),
+                        });
+                    }
+
+                }catch (e) {
+                    console.log(e);
                     toast({
-                        title: "Password: Deleted",
+                        title: "Error: Something went wrong",
                         description: formatDate(String(new Date())),
                     });
-                    setDialogOpen(false);
-                }else {
-                    // when an error from the server is returned
                 }
             }
 

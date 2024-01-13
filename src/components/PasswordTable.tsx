@@ -36,7 +36,6 @@ async function getData(token: string): Promise<Password[]> {
             return pass;
         });
 
-        console.log(returned);
         return returned;
     } catch (e) {
         console.error(e);
