@@ -51,7 +51,7 @@ const CTA = () => {
     });
     async function onExportClick(){
         try {
-            const response = await fetch('http://localhost:8080/password/exportKeyInfos', {
+            const response = await fetch('http://192.168.1.101:8080/password/exportKeyInfos', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ const CTA = () => {
             if (importFormData.file) {
                 fileContent = await readFileContent(importFormData.file);
             }
-            const response = await fetch('http://localhost:8080/password/importKeyInfos', {
+            const response = await fetch('http://192.168.1.101:8080/password/importKeyInfos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -152,7 +152,7 @@ const CTA = () => {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const response = await fetch('http://localhost:8080/password/', {
+            const response = await fetch('http://192.168.1.101:8080/password/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

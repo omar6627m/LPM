@@ -37,22 +37,26 @@ const LoginPage = () => {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const response = await fetch('http://localhost:8080/login', {
+            const response = await fetch('http://192.168.1.101:8080/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ username:"admin", password:values.password }),
             });
-            response.json().then(data=>{
+            response.json().then(data => {
                 login(data.token);
                 toast({
                     title: "Login: Successful",
                     description: formatDate(String(new Date())),
                 });
                 router.push('/');
-            })
-
+            }).catch(() => {
+                toast({
+                    title: "Error: Mac Address Not Allowed",
+                    description: formatDate(String(new Date())),
+                });
+            });
         }catch (e) {
             console.log(e);
             form.setError('password', {
@@ -63,7 +67,7 @@ const LoginPage = () => {
     }
 
     return (
-        <main className="mt-72 w-1/6">
+        <main className="mt-72 w-5/6 lg:w-1/2 xl:w-1/6 mx-auto">
             <Toaster />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

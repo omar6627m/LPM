@@ -116,7 +116,7 @@ export const columns: ColumnDef<Password>[] = [
             });
             async function onSubmitEdit(values: z.infer<typeof formSchema>) {
                 try {
-                    const response = await fetch(`http://localhost:8080/password/${password.id}`, {
+                    const response = await fetch(`http://192.168.1.101:8080/password/${password.id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export const columns: ColumnDef<Password>[] = [
 
             async function onSubmitDelete() {
                 try {
-                    const response = await fetch(`http://localhost:8080/password/${password.id}`, {
+                    const response = await fetch(`http://192.168.1.101:8080/password/${password.id}`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
