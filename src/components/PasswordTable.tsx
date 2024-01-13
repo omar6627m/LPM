@@ -5,110 +5,57 @@ import {DataTable} from "@/app/passwords/data-table";
 import {useUserStore} from "../../store/zustand";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
+import {formatDate} from "../../utils/helpers";
 
-async function getData(): Promise<Password[]> {
-    // TODO: Fetch data from API.
-    return [
-        {
-            id: "728ed52f",
-            name: "AGoogle",
-            passwordStrength: "mid",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "7l8ed52f",
-            name: "ZGoogle",
-            passwordStrength: "weak",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "72ged52f",
-            name: "Google",
-            passwordStrength: "very strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "728ed72f",
-            name: "Google",
-            passwordStrength: "strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "72ed72f",
-            name: "AAGoogle",
-            passwordStrength: "strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "728ed2f",
-            name: "Google",
-            passwordStrength: "strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "28ed72f",
-            name: "Google",
-            passwordStrength: "strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "728ed72",
-            name: "Google",
-            passwordStrength: "strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "728edfed72f",
-            name: "Google",
-            passwordStrength: "strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "72a8ed72f",
-            name: "Google",
-            passwordStrength: "strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "728qed72f",
-            name: "Google",
-            passwordStrength: "strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
-        {
-            id: "728ed7f",
-            name: "Google",
-            passwordStrength: "strong",
-            emailOrUsername: "m@example.com",
-            password:"ABCD1234"
-        },
+async function getData(token: string): Promise<Password[]> {
+    try {
+        const response = await fetch('http://localhost:8080/password/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
-    ]
+        if (!response.ok) {
+            throw new Error(`Failed to fetch data. Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const returned: Password[] = data.map((pass: Password) => {
+            if (pass.password.length <= 4) {
+                pass.passwordStrength = 'weak';
+            } else if (pass.password.length <= 8) {
+                pass.passwordStrength = 'mid';
+            } else if (pass.password.length <= 12) {
+                pass.passwordStrength = 'strong';
+            } else {
+                pass.passwordStrength = 'very strong';
+            }
+            return pass;
+        });
+
+        console.log(returned);
+        return returned;
+    } catch (e) {
+        console.error(e);
+        throw new Error('Error fetching data');
+    }
 }
 
 export default function PasswordTable() {
     const [data,setData] = useState<Password[]>();
-    const {user} = useUserStore();
+    const {user,refresh} = useUserStore();
     const router = useRouter();
 
     useEffect(() => {
         if (!user) {
             router.push("/login");
         }else{
-            getData().then(setData);
+            getData(user).then(setData);
         }
-    }, [router, user]);
+    }, [router, user,refresh]);
 
     if (!user) {
         return null;

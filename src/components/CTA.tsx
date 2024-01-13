@@ -20,11 +20,12 @@ import {router} from "next/client";
 import {toast} from "@/components/ui/use-toast";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
+import {useUserStore} from "../../store/zustand";
 
 const formSchema = z.object({
     password: z.string().min(4).max(50),
     name: z.string().min(4).max(50),
-    emailOrUsername: z.string().min(4).max(50),
+    username: z.string().min(4).max(50),
 });
 
 const CTA = () => {
@@ -34,20 +35,42 @@ const CTA = () => {
         defaultValues: {
             password: "",
             name: "",
-            emailOrUsername: "",
+            username: "",
         },
     });
+    const {user,toggleRefresh} = useUserStore();
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-        if (true) {
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        try {
+            const response = await fetch('http://localhost:8080/password/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user}`
+                },
+                body: JSON.stringify(values),
+            });
+            if (response.ok) {
+                toast({
+                        title: "Password: Created",
+                        description: formatDate(String(new Date())),
+                    });
+                setNewPasswordOpen(false);
+                toggleRefresh();
+            }else{
+                toast({
+                    title: "Error: Try again.",
+                    description: formatDate(String(new Date())),
+                });
+                setNewPasswordOpen(false);
+            }
+        }catch (e) {
             toast({
-                title: "Password: Created",
+                title: "Error: Try again.",
                 description: formatDate(String(new Date())),
             });
             setNewPasswordOpen(false);
-        }else {
-            // when an error from the server is returned
         }
     }
 
@@ -88,7 +111,7 @@ const CTA = () => {
                                     />
                                     <FormField
                                         control={form.control}
-                                        name="emailOrUsername"
+                                        name="username"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Email or Username</FormLabel>

@@ -33,7 +33,7 @@ import {Input} from "@/components/ui/input";
 export type Password = {
     id: string
     name: string
-    emailOrUsername: string
+    username: string
     password: string
     passwordStrength: "weak" | "mid" | "strong" | "very strong"
 }
@@ -41,7 +41,7 @@ export type Password = {
 const formSchema = z.object({
     password: z.string().min(4).max(50),
     name: z.string().min(4).max(50),
-    emailOrUsername: z.string().min(4).max(50),
+    username: z.string().min(4).max(50),
 });
 
 export const columns: ColumnDef<Password>[] = [
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Password>[] = [
         },
     },
     {
-        accessorKey: "emailOrUsername",
+        accessorKey: "username",
         header: "Email Or Username",
     },
     {
@@ -108,7 +108,7 @@ export const columns: ColumnDef<Password>[] = [
                 defaultValues: {
                     password: password.password,
                     name: password.name,
-                    emailOrUsername: password.emailOrUsername,
+                    username: password.username,
                 },
             });
             function onSubmitEdit(values: z.infer<typeof formSchema>) {
@@ -157,7 +157,7 @@ export const columns: ColumnDef<Password>[] = [
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="emailOrUsername"
+                                    name="username"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Email or Username</FormLabel>

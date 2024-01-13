@@ -4,6 +4,8 @@ type UserStore = {
     user: string,
     login: (token:string) => void,
     logout: () => void,
+    refresh: boolean,
+    toggleRefresh: () => void,
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -22,4 +24,8 @@ export const useUserStore = create<UserStore>((set) => ({
         localStorage.removeItem("token");
         return {user: ""};
     }),
+    refresh:false,
+    toggleRefresh:()=>set(state => {
+        return {refresh:!state.refresh}
+    })
 }));
