@@ -35,16 +35,26 @@ const LoginPage = () => {
         }
     }, [router, user]);
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-        if (values.password === correctPassword) {
-            login("token");
-            toast({
-                title: "Login: Successful",
-                description: formatDate(String(new Date())),
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        try {
+            const response = await fetch('http://localhost:8080/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username:"admin", password:values.password }),
             });
-            router.push('/');
-        }else {
+            response.json().then(data=>{
+                login(data.token);
+                toast({
+                    title: "Login: Successful",
+                    description: formatDate(String(new Date())),
+                });
+                router.push('/');
+            })
+
+        }catch (e) {
+            console.log(e);
             form.setError('password', {
                 type: 'manual',
                 message: 'Incorrect password. Please try again.',
