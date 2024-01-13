@@ -9,7 +9,7 @@ import {formatDate} from "../../utils/helpers";
 
 async function getData(token: string): Promise<Password[]> {
     try {
-        const response = await fetch('http://192.168.1.101:8080/password/', {
+        const response = await fetch('http://192.168.1.103:8080/password/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

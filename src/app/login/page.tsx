@@ -37,7 +37,7 @@ const LoginPage = () => {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const response = await fetch('http://192.168.1.101:8080/login', {
+            const response = await fetch('http://192.168.1.103:8080/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

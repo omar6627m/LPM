@@ -33,7 +33,7 @@ const Header = () => {
 
     const onAddMacAddressSubmit = async()=>{
         try {
-                const response = await fetch('http://192.168.1.101:8080/mac/', {
+                const response = await fetch('http://192.168.1.103:8080/mac/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ const Header = () => {
 
     const onAddMacAddressDelete = async(id:number)=>{
         try {
-            const response = await fetch(`http://192.168.1.101:8080/mac/${id}`, {
+            const response = await fetch(`http://192.168.1.103:8080/mac/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ const Header = () => {
 
     const fetchMacAddresses = async ()=>{
         try {
-            const response = await fetch('http://192.168.1.101:8080/mac/', {
+            const response = await fetch('http://192.168.1.103:8080/mac/', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
